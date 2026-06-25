@@ -20,8 +20,8 @@ const bookingSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
   phone: z.string().min(10, "Phone number must be at least 10 digits"),
   specialRequests: z.string().optional(),
-  agreeToPolicies: z.literal(true, {
-    errorMap: () => ({ message: "You must accept the hotel policies to proceed" })
+  agreeToPolicies: z.boolean().refine(val => val === true, {
+    message: "Please accept the Terms and Conditions."
   })
 }).refine((data) => {
   const checkInDate = new Date(data.checkIn);
@@ -379,7 +379,7 @@ export default function BookNow() {
                       I acknowledge that early check-in is subject to availability and a valid government photo ID (Aadhar, Voter ID, Passport) must be presented during check-in for all adults. PAN cards are not accepted.
                     </label>
                   </div>
-                  {errors.agreeToPolicies && <p className="text-xs text-red-500">{errors.agreeToPolicies.message}</p>}
+                  {errors.agreeToPolicies && <p className="text-xs text-red-500">Please accept the Terms and Conditions.</p>}
                 </div>
               </div>
             )}
